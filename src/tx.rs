@@ -18,11 +18,12 @@ pub fn make_transactions(mut account_balance: HashMap<String, i32>) -> (HashMap<
 
     for n in 1..amount_of_transaction {
         let sender: &String = utils::get_random_key(&keys, None);
-        //skip broke senders
-        if account_balance[sender] <= 0 {continue;}
+        //skip broke senders or senders and receivers that does not exist
+        if account_balance[sender] <= 0  {continue;}
         let receiver: &String = utils::get_random_key(&keys, Some(sender));
 
-        let amount: i32 = utils::generate_random_number(1, account_balance[sender]);
+        //+1 to inlcude upper bound
+        let amount: i32 = utils::generate_random_number(1, account_balance[sender]+1);
 
         *account_balance.get_mut(sender).unwrap() -= amount;
         *account_balance.get_mut(receiver).unwrap() += amount;
