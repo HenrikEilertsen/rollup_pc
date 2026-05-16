@@ -1,7 +1,6 @@
-use rs_merkle::{MerkleTree, MerkleProof, algorithms::Sha256};
+use rs_merkle::{MerkleTree, algorithms::Sha256};
 use sha2::{Digest, Sha256 as Sha2Hasher};
-use core::hash;
-use std::{collections::HashMap, result};
+use std::{collections::HashMap};
 use crate::tx::Transaction; 
 #[derive(Debug)]
 pub struct RollupBatch {

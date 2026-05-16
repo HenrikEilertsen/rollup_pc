@@ -1,5 +1,5 @@
 use crate::utils;
-use std::{collections::HashMap, thread::current};
+use std::{collections::HashMap};
 
 #[derive(Debug, Clone)]
 pub struct Transaction {
@@ -18,9 +18,11 @@ pub fn make_transactions(mut account_balance: HashMap<String, i32>) -> (HashMap<
 
     for n in 1..amount_of_transaction {
         let sender: &String = utils::get_random_key(&keys, None);
+        //skip broke senders
+        if account_balance[sender] <= 0 {continue;}
         let receiver: &String = utils::get_random_key(&keys, Some(sender));
-        //fix for later so do not send money they dont have
-        let amount: i32 = utils::generate_random_number(0, account_balance[sender]);
+
+        let amount: i32 = utils::generate_random_number(1, account_balance[sender]);
 
         *account_balance.get_mut(sender).unwrap() -= amount;
         *account_balance.get_mut(receiver).unwrap() += amount;
