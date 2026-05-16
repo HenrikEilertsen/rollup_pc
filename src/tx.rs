@@ -16,7 +16,7 @@ pub fn make_transactions(mut account_balance: HashMap<String, i32>) -> (HashMap<
     //to keep history of transactions for the batching
     let mut tx_list:Vec<Transaction> = Vec::new();
 
-    for n in 1..amount_of_transaction {
+    for _n in 1..amount_of_transaction {
         let sender: &String = utils::get_random_key(&keys, None);
         //skip broke senders or senders and receivers that does not exist
         if account_balance[sender] <= 0  {continue;}

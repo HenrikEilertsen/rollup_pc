@@ -2,7 +2,7 @@ use rs_merkle::{MerkleTree, algorithms::Sha256};
 use sha2::{Digest, Sha256 as Sha2Hasher};
 use std::{collections::HashMap};
 use crate::tx::Transaction; 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct RollupBatch {
     pub pre_state_root: String,
     pub transactions: Vec<Transaction>,

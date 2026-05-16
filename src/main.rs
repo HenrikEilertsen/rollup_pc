@@ -7,10 +7,11 @@ mod utils;
 
 
 fn main() {
+    let mut current_batch = batch::RollupBatch::default();
     let mut account_balance = state::get_init_account_balances();
     println!("{:?}", account_balance);
     let mut pre_account_balance = std::collections::HashMap::new();
-    let mut transactions = Vec::new();
+    //let mut transactions = Vec::new();
     
 
     loop {
@@ -30,15 +31,12 @@ fn main() {
             "make tx" => {
                 //This varible is created for the Fraud Proof
                 pre_account_balance = account_balance.clone();
-                let pre_state_root = batch::create_merkle_tree(&account_balance);
+                current_batch.pre_state_root = batch::create_merkle_tree(&account_balance);
                 let (updated_balance, tx_list) = tx::make_transactions(account_balance);
-                transactions = tx_list;
+                current_batch.transactions = tx_list;
                 account_balance = updated_balance;
                 println!("{:?}", account_balance);
-                let post_state_root = batch::create_merkle_tree(&account_balance);
-                //batch transactions and state root 
-                let current_batch = batch::RollupBatch {pre_state_root: pre_state_root,transactions: transactions.clone(), post_state_root: post_state_root};
-                println!("{:#?}", current_batch);
+                current_batch.post_state_root = batch::create_merkle_tree(&account_balance);
             }
             "fraud proof" => {
                 //claim certain amount on one account
@@ -56,9 +54,8 @@ fn main() {
                 println!("Account balance after claimed amount:{:#?}, claimed state root: {}", claimed_account_balance, claimed_state_root);
 
                 //apply transactions to previous state and create a Merkle root for comparison
-                let correct_post_account_balance = tx::apply_transactions(pre_account_balance.clone(), &transactions);
+                let correct_post_account_balance = tx::apply_transactions(pre_account_balance.clone(), &current_batch.transactions);
                 let correct_post_state: String = batch::create_merkle_tree(&correct_post_account_balance);
-                
                 println!("Correct state root: {}", correct_post_state);
 
                 if correct_post_state == claimed_state_root {
@@ -69,6 +66,9 @@ fn main() {
                 }
 
 
+            }
+            "print batch" => {
+                println!("{:#?}", current_batch);
             }
             _ => println!("unkown command"),
         }
