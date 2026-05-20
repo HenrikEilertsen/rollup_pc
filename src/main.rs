@@ -39,17 +39,11 @@ fn main() {
                 current_batch.post_state_root = batch::create_merkle_tree(&account_balance);
             }
             "fraud proof" => {
-                //claim certain amount on one account
-                println!("Enter in name and amount in this forman name:x");
-                let mut fraud_input = String::new();
-                std::io::stdin().read_line(&mut fraud_input).unwrap();
-                let parts: Vec<&str> = fraud_input.trim().split(':').collect();
-                let name = parts[0]; 
-                let amount: i32 = parts[1].parse().unwrap();
+                let (name, amount) = utils::parse_fraud_proof_inp(&account_balance);
                 
                 //create Merkle tree out of claimed account balance
                 let mut claimed_account_balance = account_balance.clone();
-                if let Some(value) = claimed_account_balance.get_mut(name) {*value = amount}
+                if let Some(value) = claimed_account_balance.get_mut(&name) {*value = amount}
                 let claimed_state_root = batch::create_merkle_tree(&claimed_account_balance);
                 println!("Account balance after claimed amount:{:#?}, claimed state root: {}", claimed_account_balance, claimed_state_root);
 
