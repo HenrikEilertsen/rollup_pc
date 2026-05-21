@@ -15,10 +15,10 @@ The program provides a simple command-line interface:
 - **make tx**  
   Creates and enqueues a new transaction into the current batch.
 
-- **fraud-proof**  
+- **fraud proof**  
   Verifies the correctness of a submitted batch and checks for invalid transactions.
 
-- **print-batch**  
+- **print batch**  
   Displays the current batch of transactions that would be submitted on-chain.
 
 ---
